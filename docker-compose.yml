@@ -4,12 +4,10 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-      - ./src:/app/src
-      - ./nest-cli.json:/app/nest-cli.json
-      - ./tsconfig.json:/app/tsconfig.json
-      - ./tsconfig.build.json:/app/tsconfig.build.json
+      - .:/app
+      - /app/node_modules
     ports:
-      - "3001:3001"
+      - '3001:3001'
     env_file:
       - .env
     depends_on:
@@ -22,7 +20,7 @@ services:
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgresdata:/var/lib/postgresql/data
 
