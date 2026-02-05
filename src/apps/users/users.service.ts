@@ -1,11 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { UsersRepository } from './users.repository';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private readonly usersRepository: UsersRepository) {}
+
+  async create(userData: Partial<User>, manager?: EntityManager) {
+    const existingUser = await this.usersRepository.findOneOrNull(
+      { email: userData.email },
+      ['email'],
+      manager,
+    );
+    if (existingUser) {
+      throw new Error('User already exists');
+    }
+    return this.usersRepository.create(userData, manager);
   }
 
   findAll() {
