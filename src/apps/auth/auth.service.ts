@@ -7,6 +7,7 @@ import { EntityManager } from 'typeorm';
 import { OtpService } from 'src/common/services/otp/otp.service';
 import { EmailService } from 'src/common/services/notifications/email/email.notification';
 import { Msgs } from 'src/common/utils/messages.utils';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
     private readonly atomicTransaction: AtomicTransactionService,
     private readonly otpService: OtpService,
     private readonly emailService: EmailService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(data: RegisterDto): Promise<User> {
@@ -82,6 +84,16 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException(Msgs.auth.INVALID_CREDENTIALS());
     }
-    return user;
+
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+
+    return {
+      token,
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
   }
 }
