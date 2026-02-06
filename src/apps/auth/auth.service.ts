@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/auth.dto';
 import { User } from '../users/entities/user.entity';
@@ -48,7 +48,7 @@ export class AuthService {
     });
   }
 
-  async verifyEmail(email: string, otp: string): Promise<boolean> {
+  async verify(email: string, otp: string): Promise<boolean> {
     const isValid = await this.otpService.verifyOtp(email, otp);
 
     if (!isValid) {
@@ -66,5 +66,22 @@ export class AuthService {
     // Get OTP (existing or new) and send email
     const otp = await this.otpService.resendOtp(email);
     await this.sendOtpEmail(user, otp);
+  }
+
+  async validateUser(
+    email: User['email'],
+    password: User['password'],
+  ): Promise<User | null> {
+    const user = await this.usersService.findOneOrNull({ email });
+    const isValid = await user?.comparePassword(password);
+    return isValid ? user : null;
+  }
+
+  async login(email: string, password: string) {
+    const user = await this.validateUser(email, password);
+    if (!user) {
+      throw new UnauthorizedException(Msgs.auth.INVALID_CREDENTIALS());
+    }
+    return user;
   }
 }

@@ -1,8 +1,8 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { Msgs } from 'src/common/utils/messages.utils';
+import { EntityManager, FindOptionsWhere } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UsersRepository } from './users.repository';
-import { EntityManager } from 'typeorm';
-import { Msgs } from 'src/common/utils/messages.utils';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +22,22 @@ export class UsersService {
 
   async findByEmail(email: string, manager?: EntityManager): Promise<User> {
     return this.usersRepository.findByEmail(email, manager);
+  }
+
+  async findById(
+    id: string,
+    select?: Array<keyof User>,
+    manager?: EntityManager,
+  ): Promise<User> {
+    return this.usersRepository.findOneBy({ id }, select, manager);
+  }
+
+  async findOneOrNull(
+    cond: FindOptionsWhere<User> | FindOptionsWhere<User>[],
+    select?: Array<keyof User>,
+    manager?: EntityManager,
+  ): Promise<User | null> {
+    return this.usersRepository.findOneOrNull(cond, select, manager);
   }
 
   async markAsVerified(email: string, manager?: EntityManager): Promise<void> {
