@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UsersRepository } from './users.repository';
 import { EntityManager } from 'typeorm';
+import { Msgs } from 'src/common/utils/messages.utils';
 
 @Injectable()
 export class UsersService {
@@ -14,24 +15,17 @@ export class UsersService {
       manager,
     );
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new ConflictException(Msgs.auth.USER_ALREADY_EXISTS());
     }
     return this.usersRepository.create(userData, manager);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findByEmail(email: string, manager?: EntityManager): Promise<User> {
+    return this.usersRepository.findByEmail(email, manager);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: User) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async markAsVerified(email: string, manager?: EntityManager): Promise<void> {
+    const user = await this.usersRepository.findByEmail(email, manager);
+    await this.usersRepository.updateUser(user.id, { verifiedAt: new Date() }, manager);
   }
 }

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - OTP Code</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .otp-container {
+            background-color: #f8f9fa;
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .otp-code {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #007bff;
+            font-family: 'Courier New', monospace;
+        }
+        .instructions {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            font-size: 12px;
+            color: #6c757d;
+            text-align: center;
+        }
+        .warning {
+            color: #dc3545;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">CredPal</div>
+            <h1 class="title">Email Verification</h1>
+        </div>
+
+        <p>Hello <strong><%= recipientName %></strong>,</p>
+
+        <p>Thank you for registering with CredPal! To complete your email verification and activate your account, please use the One-Time Password (OTP) below:</p>
+
+        <div class="otp-container">
+            <div class="otp-code"><%= otp %></div>
+        </div>
+
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <ul>
+                <li>Enter this OTP code in the verification field within <strong>10 minutes</strong></li>
+                <li>This code can only be used once</li>
+                <li>If you didn't request this code, please ignore this email</li>
+            </ul>
+        </div>
+
+        <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+
+        <div class="footer">
+            <p><strong>Security Notice:</strong> <span class="warning">Never share this OTP code with anyone.</span> Our team will never ask for your OTP via phone or email.</p>
+            <p>&copy; 2026 CredPal. All rights reserved.</p>
+            <p>This is an automated message, please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>

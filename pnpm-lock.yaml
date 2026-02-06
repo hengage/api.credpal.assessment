@@ -59,6 +59,9 @@ importers:
       pg:
         specifier: ^8.18.0
         version: 8.18.0
+      redial:
+        specifier: ^0.5.0
+        version: 0.5.0
       redis:
         specifier: ^5.10.0
         version: 5.10.0
@@ -3222,6 +3225,9 @@ packages:
   readdirp@4.1.2:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
+
+  redial@0.5.0:
+    resolution: {integrity: sha512-mkxmTGPrVK8skIy0j9IGAK/0GLRNnnUi7ois7bPQSGRD+E7y4SfarcxKD7NXNeVnsaMA6/F5ckF9ntF4wYeNqQ==}
 
   redis@5.10.0:
     resolution: {integrity: sha512-0/Y+7IEiTgVGPrLFKy8oAEArSyEJkU0zvgV5xyi9NzNQ+SLZmyFbUsWIbgPcd4UdUh00opXGKlXJwMmsis5Byw==}
@@ -7403,6 +7409,8 @@ snapshots:
       util-deprecate: 1.0.2
 
   readdirp@4.1.2: {}
+
+  redial@0.5.0: {}
 
   redis@5.10.0:
     dependencies:
