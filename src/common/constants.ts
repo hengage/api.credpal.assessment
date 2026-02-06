@@ -7,3 +7,13 @@ export const REPOSITORY_TOKENS = {
 export const TABLE_NAMES = {
   USERS: 'users',
 } as const;
+
+export const DATABASE_LOCK_MODES = {
+  PESSIMISTIC_READ: 'pessimistic_read',
+  PESSIMISTIC_WRITE: 'pessimistic_write',
+} as const;
+
+export const AUTH_STRATEGIES = {
+  LOCAL: 'local',
+  JWT: 'jwt',
+} as const;
