@@ -8,6 +8,8 @@ import { OtpService } from 'src/common/services/otp/otp.service';
 import { EmailService } from 'src/common/services/notifications/email/email.notification';
 import { Msgs } from 'src/common/utils/messages.utils';
 import { JwtService } from '@nestjs/jwt';
+import { ApiResponseDto } from 'src/common/dtos/api-response.dto';
+import { UserDto } from 'src/apps/users/dto/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -79,7 +81,7 @@ export class AuthService {
     return isValid ? user : null;
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<{ token: string; user: UserDto }> {
     const user = await this.validateUser(email, password);
     if (!user) {
       throw new UnauthorizedException(Msgs.auth.INVALID_CREDENTIALS());
@@ -88,12 +90,16 @@ export class AuthService {
     const payload = { sub: user.id, email: user.email };
     const token = this.jwtService.sign(payload);
 
-    return {
-      token,
+    const userDto: UserDto = {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+    };
+
+    return {
+      token,
+      user: userDto,
     };
   }
 }
