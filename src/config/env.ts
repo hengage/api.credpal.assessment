@@ -22,10 +22,14 @@ const envConfig: Record<EnvironmentKeys, EnvConfig> = {
   [EnvironmentKeys.EMAIL_PROVIDER]: { type: 'string' },
   [EnvironmentKeys.EMAIL_SENDER_EMAIL]: { type: 'string' },
   [EnvironmentKeys.EMAIL_SENDER_NAME]: { type: 'string' },
+  [EnvironmentKeys.REDIS_URL]: { type: 'string' },
+  [EnvironmentKeys.REDIS_HOST]: { type: 'string' },
+  [EnvironmentKeys.REDIS_PASSWORD]: { type: 'string' },
 
   // Numbers
   [EnvironmentKeys.PORT]: { type: 'number', fallback: 8080 },
   [EnvironmentKeys.DATABASE_PORT]: { type: 'number' },
+  [EnvironmentKeys.REDIS_PORT]: { type: 'number', fallback: 6379 },
 } as const;
 
 // Lazy loading function to avoid timing issues

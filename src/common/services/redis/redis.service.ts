@@ -2,16 +2,18 @@ import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient } from 'redis';
 import type { RedisClientType } from 'redis';
+import { ENV } from '../../../config/env';
+import { EnvironmentKeys } from 'src/config/config.service';
 
 @Injectable()
 export class RedisService implements OnApplicationShutdown {
   private client: RedisClientType;
 
   constructor(private configService: ConfigService) {
-    const redisUrl = this.configService.get<string>('REDIS_URL');
-    const host = this.configService.get<string>('REDIS_HOST', 'redis');
-    const port = this.configService.get<number>('REDIS_PORT', 6379);
-    const password = this.configService.get<string>('REDIS_PASSWORD');
+    const redisUrl = ENV.REDIS_URL as EnvironmentKeys;
+    const host = ENV.REDIS_HOST as EnvironmentKeys;
+    const port = ENV.REDIS_PORT as EnvironmentKeys;
+    const password = ENV.REDIS_PASSWORD as EnvironmentKeys;
 
     this.client = redisUrl
       ? createClient({ url: redisUrl })
