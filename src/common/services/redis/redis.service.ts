@@ -9,10 +9,10 @@ import { EnvironmentKeys } from 'src/config/config.service';
 export class RedisService implements OnApplicationShutdown {
   private client: RedisClientType;
 
-  constructor(private configService: ConfigService) {
+  constructor() {
     const redisUrl = ENV.REDIS_URL as EnvironmentKeys;
     const host = ENV.REDIS_HOST as EnvironmentKeys;
-    const port = ENV.REDIS_PORT as EnvironmentKeys;
+    const port = ENV.REDIS_PORT as number;
     const password = ENV.REDIS_PASSWORD as EnvironmentKeys;
 
     this.client = redisUrl
