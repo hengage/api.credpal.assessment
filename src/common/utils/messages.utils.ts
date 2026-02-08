@@ -15,4 +15,11 @@ export const Msgs = {
       REQUIRED: () => 'Authentication token is required',
     },
   },
+
+  common: {
+    NOT_FOUND: (resource: string) => `${resource} not found`,
+    SERVER_ERROR: () => 'An unexpected error occurred. Please try again later.',
+    ACCESS_DENIED: () => 'You do not have permission to perform this action',
+    MISSING_ENV: (key: string) => `Missing environment variable: ${key}`,
+  },
 };

@@ -5,6 +5,7 @@ import { ENV } from './config/env';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './config/swagger.config';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +24,8 @@ async function bootstrap() {
     new ClassSerializerInterceptor(app.get(Reflector)),
     new ResponseInterceptor(app.get(Reflector)),
   );
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   setupSwagger(app);
   await app.listen(ENV.PORT as EnvironmentKeys);
 }
