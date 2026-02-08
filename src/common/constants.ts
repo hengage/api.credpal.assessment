@@ -17,3 +17,7 @@ export const AUTH_STRATEGIES = {
   LOCAL: 'local',
   JWT: 'jwt',
 } as const;
+
+export const METADATA_KEYS = {
+  RESPONSE_MESSAGE: 'responseMessage',
+} as const;
