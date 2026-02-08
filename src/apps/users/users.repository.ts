@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Msgs } from 'src/common/utils/messages.utils';
-import { Keys, DatabaseLockMode } from 'src/types.d';
 
 @Injectable()
 export class UsersRepository {
