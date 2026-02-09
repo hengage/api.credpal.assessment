@@ -22,9 +22,9 @@ const envConfig: Record<EnvironmentKeys, EnvConfig> = {
   [EnvironmentKeys.EMAIL_PROVIDER]: { type: 'string' },
   [EnvironmentKeys.EMAIL_SENDER_EMAIL]: { type: 'string' },
   [EnvironmentKeys.EMAIL_SENDER_NAME]: { type: 'string' },
-  [EnvironmentKeys.REDIS_URL]: { type: 'string' },
+  [EnvironmentKeys.REDIS_URL]: { type: 'string', required: false },
   [EnvironmentKeys.REDIS_HOST]: { type: 'string' },
-  [EnvironmentKeys.REDIS_PASSWORD]: { type: 'string' },
+  [EnvironmentKeys.REDIS_PASSWORD]: { type: 'string', required: false },
 
   // Numbers
   [EnvironmentKeys.PORT]: { type: 'number', fallback: 8080 },
