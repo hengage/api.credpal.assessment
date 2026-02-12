@@ -30,6 +30,13 @@ export const DATABASE_LOCK_MODES = {
 
 
 
+export const SORT_ORDERS = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+} as const;
+
+
+
 export const AUTH_STRATEGIES = {
 
   LOCAL: 'local',

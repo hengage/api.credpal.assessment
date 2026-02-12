@@ -6,7 +6,7 @@ export abstract class BaseRepository<T> {
 
     protected async findOneWithLock<K extends keyof T>(
         alias: string,
-        cond: FindOptionsWhere<T>,
+        cond: FindOptionsWhere<T> | FindOptionsWhere<T>[],
         select?: K[],
         manager?: EntityManager,
         lockMode?: DatabaseLockMode,
