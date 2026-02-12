@@ -1,8 +1,9 @@
 import { TABLE_NAMES } from 'src/common/constants';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToOne } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { PasswordUtil } from 'src/common/utils/password.utils';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { Wallet } from 'src/apps/wallets/entities/wallet.entity';
 
 @Entity(TABLE_NAMES.USERS)
 export class User extends BaseEntity {
@@ -21,6 +22,9 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   verifiedAt?: Date;
+
+  @OneToOne(() => Wallet, (wallet) => wallet.user)
+  wallet: Wallet;
 
   @BeforeInsert()
   @BeforeUpdate()
