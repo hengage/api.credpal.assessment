@@ -11,6 +11,7 @@ import { ENV } from 'src/config/env';
 import { EnvironmentKeys } from 'src/config/config.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { WalletsModule } from '../wallets/wallets.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     DatabaseModule,
     OtpModule,
     EmailModule,
+    WalletsModule,
     PassportModule,
     JwtModule.register({
       secret: ENV.JWT_SECRET as EnvironmentKeys,

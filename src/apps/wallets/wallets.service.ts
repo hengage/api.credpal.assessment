@@ -1,26 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateWalletDto } from './dto/create-wallet.dto';
-import { UpdateWalletDto } from './dto/update-wallet.dto';
+import { Wallet } from './entities/wallet.entity';
+import { WalletRepository } from './wallets.repository';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class WalletsService {
-  create(createWalletDto: CreateWalletDto) {
-    return 'This action adds a new wallet';
+  constructor(private readonly walletRepo: WalletRepository) { }
+
+  async create(
+    userId: ID,
+    manager?: EntityManager
+  ) {
+    const wallet = await this.walletRepo.createWallet(userId, manager);
+    const balances = await this.walletRepo.createWalletBalances(wallet.id, undefined, manager);
   }
 
-  findAll() {
-    return `This action returns all wallets`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} wallet`;
-  }
-
-  update(id: number, updateWalletDto: UpdateWalletDto) {
-    return `This action updates a #${id} wallet`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} wallet`;
+  async getWalletByUserId(userId: string): Promise<Wallet | null> {
+    return await this.walletRepo.findOneBy({ user: { id: userId } });
   }
 }
