@@ -10,7 +10,7 @@ export function setupSwagger(app: INestApplication) {
     .setVersion('1.0')
     .addBearerAuth()
     .addTag('Authentication', 'User registration, login, and email verification')
-    .addTag('Wallet', 'Multi-currency wallet management and funding')
+    .addTag('Wallets', 'Multi-currency wallet management and funding')
     .addTag('FX Trading', 'Currency conversion and trading operations')
     .addTag('Transactions', 'Transaction history and audit trail')
     .addTag('FX Rates', 'Real-time foreign exchange rates')

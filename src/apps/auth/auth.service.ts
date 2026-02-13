@@ -8,13 +8,14 @@ import { OtpService } from 'src/common/services/otp/otp.service';
 import { EmailService } from 'src/common/services/notifications/email/email.notification';
 import { Msgs } from 'src/common/utils/messages.utils';
 import { JwtService } from '@nestjs/jwt';
-import { ApiResponseDto } from 'src/common/dtos/api-response.dto';
 import { UserDto } from 'src/apps/users/dto/user.dto';
+import { WalletsService } from '../wallets/wallets.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly walletService: WalletsService,
     private readonly atomicTransaction: AtomicTransactionService,
     private readonly otpService: OtpService,
     private readonly emailService: EmailService,
@@ -26,9 +27,11 @@ export class AuthService {
       async (txnManager: EntityManager) => {
         const user = await this.usersService.create(data, txnManager);
 
+        // Create wallet with default balances
+        await this.walletService.create(user.id, txnManager);
+
         // Generate and send OTP
         const otp = this.otpService.generateOtp();
-        console.log('OTP:', otp);
         await this.otpService.storeOtp(user.email, otp);
         this.sendOtpEmail(user, otp).catch(() => {
           // prevent crash but don't fail registration
