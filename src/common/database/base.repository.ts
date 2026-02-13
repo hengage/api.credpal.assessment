@@ -17,7 +17,12 @@ export abstract class BaseRepository<T> {
 
         // Apply filters dynamically
         Object.entries(cond).forEach(([key, value]) => {
-            qb.andWhere(`${alias}.${key} = :${key}`, { [key]: value });
+            if (value !== null && typeof value === 'object' && 'id' in value) {
+                // relation condition e.g. { wallet: { id: '83d7f8c2...' } }
+                qb.andWhere(`${alias}.${key} = :${key}`, { [key]: (value as any).id });
+            } else {
+                qb.andWhere(`${alias}.${key} = :${key}`, { [key]: value });
+            }
         });
 
         // Apply select (only requested columns)
