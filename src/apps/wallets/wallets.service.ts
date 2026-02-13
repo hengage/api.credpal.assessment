@@ -61,7 +61,6 @@ export class WalletsService {
       walletId: wallet.id,
       balances: wallet.balances.map((b) => ({
         currency: b.currency,
-        balanceMinor: b.balanceMinor,
         balanceMajor: CurrencyUtil.toMajor(b.balanceMinor, b.currency),
       })),
     };

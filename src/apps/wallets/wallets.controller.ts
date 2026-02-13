@@ -4,7 +4,8 @@ import { ResponseMessage } from 'src/common/decorators/response.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { FundWalletDto } from './dto/wallets.dto';
 import { WalletsService } from './wallets.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { FundWalletResponseDto, GetWalletResponseDto } from './dto/wallet-response.dto';
 
 @Controller('wallet')
 export class WalletsController {
@@ -14,6 +15,10 @@ export class WalletsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ResponseMessage('Wallet funded successfully')
+  @ApiOkResponse({
+    type: FundWalletResponseDto,
+    description: 'Wallet funded successfully',
+  })
   fundWallet(
     @CurrentUserCtx('id') userId: string,
     @Body() dto: FundWalletDto,
@@ -26,6 +31,10 @@ export class WalletsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ResponseMessage('Wallet retrieved')
+  @ApiOkResponse({
+    type: GetWalletResponseDto,
+    description: 'Wallet retrieved',
+  })
   getWallet(@CurrentUserCtx('id') userId: string) {
     return this.walletsService.getWallet(userId);
   }
