@@ -42,7 +42,6 @@ export class WalletsService {
 
       const amountMinor = CurrencyUtil.toMinor(dto.amount, dto.currency);
 
-      console.log('Wallet id:', wallet.id);
       await this.walletBalanceRepo.credit(wallet.id, dto.currency, Number(amountMinor), manager);
 
       const updated = await this.walletBalanceRepo.getBalance(wallet.id, dto.currency, manager);
@@ -53,4 +52,19 @@ export class WalletsService {
       };
     });
   }
+
+  async getWallet(userId: string) {
+    const wallet = await this.walletRepo.findOneWithBalances(userId);
+    if (!wallet) throw new NotFoundException(Msgs.common.NOT_FOUND('wallet'));
+
+    return {
+      walletId: wallet.id,
+      balances: wallet.balances.map((b) => ({
+        currency: b.currency,
+        balanceMinor: b.balanceMinor,
+        balanceMajor: CurrencyUtil.toMajor(b.balanceMinor, b.currency),
+      })),
+    };
+  }
 }
+

@@ -32,4 +32,19 @@ export class WalletRepository extends BaseRepository<Wallet> {
             select,
         });
     }
+
+    async findOneWithBalances(
+        userId: ID,
+        manager?: EntityManager,
+    ): Promise<Wallet | null> {
+        const repo = manager?.getRepository(Wallet) ?? this.repo;
+        return repo.findOne({
+            where: { user: { id: userId } },
+            relations: { balances: true },
+            select: {
+                id: true,
+                balances: { id: true, currency: true, balanceMinor: true },
+            },
+        });
+    }
 }

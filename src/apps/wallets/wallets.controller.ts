@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CurrentUserCtx } from 'src/common/decorators/current-user.decorator';
 import { ResponseMessage } from 'src/common/decorators/response.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -6,7 +6,7 @@ import { FundWalletDto } from './dto/wallets.dto';
 import { WalletsService } from './wallets.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-@Controller('wallets')
+@Controller('wallet')
 export class WalletsController {
   constructor(private readonly walletsService: WalletsService) { }
 
@@ -22,4 +22,11 @@ export class WalletsController {
     return this.walletsService.fundWallet(userId, dto);
   }
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ResponseMessage('Wallet retrieved')
+  getWallet(@CurrentUserCtx('id') userId: string) {
+    return this.walletsService.getWallet(userId);
+  }
 }
