@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './apps/auth/auth.module';
 import { CommonServicesModule } from './common/services/common-services.module';
 import { WalletsModule } from './apps/wallets/wallets.module';
+import { TransactionsModule } from './apps/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { WalletsModule } from './apps/wallets/wallets.module';
     AuthModule,
     CommonServicesModule,
     WalletsModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
