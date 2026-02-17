@@ -46,20 +46,20 @@ export class WalletBalanceRepository extends BaseRepository<WalletBalance> {
     async credit(
         walletId: ID,
         currency: CurrencyCode,
-        amountMinor: number,
+        amountMinor: bigint,
         manager?: EntityManager,
     ) {
         const repo = manager?.getRepository(WalletBalance) ?? this.repo;
-        return repo.increment({ wallet: { id: walletId }, currency }, 'balanceMinor', amountMinor);
+        return repo.increment({ wallet: { id: walletId }, currency }, 'balanceMinor', amountMinor.toString());
     }
 
     async debit(
         walletId: ID,
         currency: CurrencyCode,
-        amountMinor: number,
+        amountMinor: bigint,
         manager?: EntityManager,
     ) {
         const repo = manager?.getRepository(WalletBalance) ?? this.repo;
-        return repo.decrement({ wallet: { id: walletId }, currency }, 'balanceMinor', amountMinor);
+        return repo.decrement({ wallet: { id: walletId }, currency }, 'balanceMinor', amountMinor.toString());
     }
 }

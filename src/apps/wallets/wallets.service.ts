@@ -42,7 +42,7 @@ export class WalletsService {
 
       const amountMinor = CurrencyUtil.toMinor(dto.amount, dto.currency);
 
-      await this.walletBalanceRepo.credit(wallet.id, dto.currency, Number(amountMinor), manager);
+      await this.walletBalanceRepo.credit(wallet.id, dto.currency, amountMinor, manager);
 
       const updated = await this.walletBalanceRepo.getBalance(wallet.id, dto.currency, manager);
 
