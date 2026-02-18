@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Wallet } from './entities/wallet.entity';
 import { WalletRepository } from './wallets.repository';
 import { EntityManager } from 'typeorm';
@@ -7,6 +7,9 @@ import { CurrencyUtil } from 'src/common/utils/currency.utils';
 import { AtomicTransactionService } from 'src/database/atomic-transaction.service';
 import { Msgs } from 'src/common/utils/messages.utils';
 import { WalletBalanceRepository } from './wallet-balance.repository';
+import { TransactionStatus, TransactionType } from '../transactions/entities/transaction.entity';
+import { ITransactionsService } from '../transactions/transactions.service.abstract';
+import { CurrencyCode, DATABASE_LOCK_MODES } from 'src/common/constants';
 
 @Injectable()
 export class WalletsService {
@@ -14,6 +17,7 @@ export class WalletsService {
     private readonly walletRepo: WalletRepository,
     private readonly walletBalanceRepo: WalletBalanceRepository,
     private readonly atomicTransaction: AtomicTransactionService,
+    private readonly transactionsService: ITransactionsService,
   ) { }
 
   async create(
@@ -46,11 +50,45 @@ export class WalletsService {
 
       const updated = await this.walletBalanceRepo.getBalance(wallet.id, dto.currency, manager);
 
+      // Record transaction
+      await this.transactionsService.create(
+        {
+          wallet: { id: wallet.id } as any,
+          type: TransactionType.FUND,
+          status: TransactionStatus.SUCCESS,
+          currency: dto.currency,
+          amountMinor: String(amountMinor),
+          balanceAfterMinor: updated.balanceMinor,
+          description: `Funded ${dto.currency} wallet`,
+        },
+        manager,
+      );
+
+
       return {
         currency: updated!.currency,
         balanceMajor: CurrencyUtil.toMajor(updated!.balanceMinor, dto.currency),
       };
     });
+  }
+
+  async hasSufficientBalance(
+    walletId: ID,
+    currency: CurrencyCode,
+    amountMinor: bigint,
+    manager?: EntityManager,
+  ) {
+    const balance = await this.walletBalanceRepo.getBalance(
+      walletId,
+      currency,
+      manager,
+      DATABASE_LOCK_MODES.PESSIMISTIC_WRITE,
+    );
+
+    const hasSufficient = BigInt(balance.balanceMinor) >= amountMinor;
+    if (!hasSufficient) {
+      throw new BadRequestException(`Insufficient ${currency} balance`);
+    }
   }
 
   async getWallet(userId: string) {

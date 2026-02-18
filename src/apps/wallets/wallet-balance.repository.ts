@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { BaseRepository } from "src/common/database/base.repository";
 import { DATA_SOURCE } from "src/common/constants";
 import { DataSource, EntityManager, FindOptionsWhere, Repository } from "typeorm";
@@ -33,24 +33,40 @@ export class WalletBalanceRepository extends BaseRepository<WalletBalance> {
         currency: CurrencyCode,
         manager?: EntityManager,
         lockMode?: DatabaseLockMode,
-    ): Promise<WalletBalance | null> {
-        return this.findOneWithLock(
+    ): Promise<WalletBalance> {
+        const balance = await this.findOneWithLock(
             'walletBalance',
             { wallet: { id: walletId }, currency },
             ['id', 'currency', 'balanceMinor'],
             manager,
             lockMode
         );
+
+        if (!balance) {
+            throw new NotFoundException(`Balance not found for wallet ${walletId} and currency ${currency}`);
+        }
+
+        return balance;
     }
+
 
     async credit(
         walletId: ID,
         currency: CurrencyCode,
         amountMinor: bigint,
         manager?: EntityManager,
-    ) {
+    ): Promise<WalletBalance['balanceMinor']> {
         const repo = manager?.getRepository(WalletBalance) ?? this.repo;
-        return repo.increment({ wallet: { id: walletId }, currency }, 'balanceMinor', amountMinor.toString());
+
+        const result = await repo
+            .createQueryBuilder()
+            .update(WalletBalance)
+            .set({ balanceMinor: () => `"balanceMinor" + ${amountMinor}` })
+            .where({ wallet: { id: walletId }, currency })
+            .returning('balanceMinor')
+            .execute();
+
+        return result.raw[0].balanceMinor;
     }
 
     async debit(
@@ -58,8 +74,17 @@ export class WalletBalanceRepository extends BaseRepository<WalletBalance> {
         currency: CurrencyCode,
         amountMinor: bigint,
         manager?: EntityManager,
-    ) {
+    ): Promise<WalletBalance['balanceMinor']> {
         const repo = manager?.getRepository(WalletBalance) ?? this.repo;
-        return repo.decrement({ wallet: { id: walletId }, currency }, 'balanceMinor', amountMinor.toString());
+
+        const result = await repo
+            .createQueryBuilder()
+            .update(WalletBalance)
+            .set({ balanceMinor: () => `"balanceMinor" - ${amountMinor}` })
+            .where({ wallet: { id: walletId }, currency })
+            .returning('balanceMinor')
+            .execute();
+
+        return result.raw[0].balanceMinor;
     }
 }

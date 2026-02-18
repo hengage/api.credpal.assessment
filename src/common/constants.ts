@@ -1,7 +1,4 @@
-
 export const DATA_SOURCE = 'DATA_SOURCE';
-
-
 
 export const REPOSITORY_TOKENS = {
   USER: 'USER_REPOSITORY',
@@ -9,48 +6,32 @@ export const REPOSITORY_TOKENS = {
   WALLET_BALANCE: 'WALLET_BALANCE_REPOSITORY',
 } as const;
 
-
-
 export const TABLE_NAMES = {
   USERS: 'users',
   WALLET: 'wallets',
   WALLET_BALANCE: 'wallet_balances',
-
+  TRANSACTION: 'transactions',
 } as const;
 
-
-
 export const DATABASE_LOCK_MODES = {
-
   PESSIMISTIC_READ: 'pessimistic_read',
 
   PESSIMISTIC_WRITE: 'pessimistic_write',
-
 } as const;
-
-
 
 export const SORT_ORDERS = {
   ASC: 'ASC',
   DESC: 'DESC',
 } as const;
 
-
-
 export const AUTH_STRATEGIES = {
-
   LOCAL: 'local',
 
   JWT: 'jwt',
-
 } as const;
 
-
-
 export const METADATA_KEYS = {
-
   RESPONSE_MESSAGE: 'responseMessage',
-
 } as const;
 
 export enum CurrencyCode {
@@ -64,7 +45,6 @@ export enum CurrencyCode {
   CHF = 'CHF',
   KWD = 'KWD',
 }
-
 
 export const CURRENCY_META = {
   [CurrencyCode.USD]: { code: CurrencyCode.USD, minorUnit: 2, symbol: '$' },
