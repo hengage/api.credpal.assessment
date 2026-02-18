@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { BaseRepository } from "src/common/database/base.repository";
 import { DATA_SOURCE } from "src/common/constants";
 import { DataSource, EntityManager, FindOptionsWhere, Repository } from "typeorm";
@@ -33,14 +33,20 @@ export class WalletBalanceRepository extends BaseRepository<WalletBalance> {
         currency: CurrencyCode,
         manager?: EntityManager,
         lockMode?: DatabaseLockMode,
-    ): Promise<WalletBalance | null> {
-        return this.findOneWithLock(
+    ): Promise<WalletBalance> {
+        const balance = await this.findOneWithLock(
             'walletBalance',
             { wallet: { id: walletId }, currency },
             ['id', 'currency', 'balanceMinor'],
             manager,
             lockMode
         );
+
+        if (!balance) {
+            throw new NotFoundException(`Balance not found for wallet ${walletId} and currency ${currency}`);
+        }
+
+        return balance;
     }
 
     async credit(

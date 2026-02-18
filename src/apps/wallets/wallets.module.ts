@@ -4,9 +4,10 @@ import { WalletRepository } from './wallets.repository';
 import { DatabaseModule } from 'src/database/database.module';
 import { WalletsService } from './wallets.service';
 import { WalletBalanceRepository } from './wallet-balance.repository';
+import { TransactionsModule } from '../transactions/transactions.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, TransactionsModule],
   controllers: [WalletsController],
   providers: [WalletsService, WalletRepository, WalletBalanceRepository],
   exports: [WalletsService],
