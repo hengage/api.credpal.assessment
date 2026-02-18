@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Wallet } from './entities/wallet.entity';
 import { WalletRepository } from './wallets.repository';
 import { EntityManager } from 'typeorm';
@@ -9,6 +9,7 @@ import { Msgs } from 'src/common/utils/messages.utils';
 import { WalletBalanceRepository } from './wallet-balance.repository';
 import { TransactionStatus, TransactionType } from '../transactions/entities/transaction.entity';
 import { ITransactionsService } from '../transactions/transactions.service.abstract';
+import { CurrencyCode, DATABASE_LOCK_MODES } from 'src/common/constants';
 
 @Injectable()
 export class WalletsService {
@@ -69,6 +70,25 @@ export class WalletsService {
         balanceMajor: CurrencyUtil.toMajor(updated!.balanceMinor, dto.currency),
       };
     });
+  }
+
+  async hasSufficientBalance(
+    walletId: ID,
+    currency: CurrencyCode,
+    amountMinor: bigint,
+    manager?: EntityManager,
+  ) {
+    const balance = await this.walletBalanceRepo.getBalance(
+      walletId,
+      currency,
+      manager,
+      DATABASE_LOCK_MODES.PESSIMISTIC_WRITE,
+    );
+
+    const hasSufficient = BigInt(balance.balanceMinor) >= amountMinor;
+    if (!hasSufficient) {
+      throw new BadRequestException(`Insufficient ${currency} balance`);
+    }
   }
 
   async getWallet(userId: string) {
