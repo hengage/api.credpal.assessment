@@ -6,7 +6,7 @@ export class OtpService {
   private readonly OTP_PREFIX = 'otp:';
   private readonly OTP_TTL_SECONDS = 10 * 60; // 10 minutes
 
-  constructor(private redisService: RedisService) { }
+  constructor(private redisService: RedisService) {}
 
   /**
    * Generate a 6-digit OTP

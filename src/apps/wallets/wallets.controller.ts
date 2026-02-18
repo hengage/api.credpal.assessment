@@ -5,11 +5,14 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { FundWalletDto } from './dto/wallets.dto';
 import { WalletsService } from './wallets.service';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
-import { FundWalletResponseDto, GetWalletResponseDto } from './dto/wallet-response.dto';
+import {
+  FundWalletResponseDto,
+  GetWalletResponseDto,
+} from './dto/wallet-response.dto';
 
 @Controller('wallet')
 export class WalletsController {
-  constructor(private readonly walletsService: WalletsService) { }
+  constructor(private readonly walletsService: WalletsService) {}
 
   @Post('fund')
   @UseGuards(JwtAuthGuard)
@@ -19,10 +22,7 @@ export class WalletsController {
     type: FundWalletResponseDto,
     description: 'Wallet funded successfully',
   })
-  fundWallet(
-    @CurrentUserCtx('id') userId: string,
-    @Body() dto: FundWalletDto,
-  ) {
+  fundWallet(@CurrentUserCtx('id') userId: string, @Body() dto: FundWalletDto) {
     console.log('User ID:', userId);
     return this.walletsService.fundWallet(userId, dto);
   }

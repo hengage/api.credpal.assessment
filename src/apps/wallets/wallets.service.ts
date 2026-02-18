@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Wallet } from './entities/wallet.entity';
 import { WalletRepository } from './wallets.repository';
 import { EntityManager } from 'typeorm';
@@ -7,7 +11,10 @@ import { CurrencyUtil } from 'src/common/utils/currency.utils';
 import { AtomicTransactionService } from 'src/database/atomic-transaction.service';
 import { Msgs } from 'src/common/utils/messages.utils';
 import { WalletBalanceRepository } from './wallet-balance.repository';
-import { TransactionStatus, TransactionType } from '../transactions/entities/transaction.entity';
+import {
+  TransactionStatus,
+  TransactionType,
+} from '../transactions/entities/transaction.entity';
 import { ITransactionsService } from '../transactions/transactions.service.abstract';
 import { CurrencyCode, DATABASE_LOCK_MODES } from 'src/common/constants';
 
@@ -18,14 +25,15 @@ export class WalletsService {
     private readonly walletBalanceRepo: WalletBalanceRepository,
     private readonly atomicTransaction: AtomicTransactionService,
     private readonly transactionsService: ITransactionsService,
-  ) { }
+  ) {}
 
-  async create(
-    userId: ID,
-    manager?: EntityManager
-  ) {
+  async create(userId: ID, manager?: EntityManager) {
     const wallet = await this.walletRepo.createWallet(userId, manager);
-    const balances = await this.walletBalanceRepo.createWalletBalances(wallet.id, undefined, manager);
+    const balances = await this.walletBalanceRepo.createWalletBalances(
+      wallet.id,
+      undefined,
+      manager,
+    );
   }
 
   async getWalletByUserId(userId: string): Promise<Wallet | null> {
@@ -41,14 +49,23 @@ export class WalletsService {
       );
 
       if (!wallet) {
-        throw new NotFoundException(Msgs.common.NOT_FOUND('wallet'))
+        throw new NotFoundException(Msgs.common.NOT_FOUND('wallet'));
       }
 
       const amountMinor = CurrencyUtil.toMinor(dto.amount, dto.currency);
 
-      await this.walletBalanceRepo.credit(wallet.id, dto.currency, amountMinor, manager);
+      await this.walletBalanceRepo.credit(
+        wallet.id,
+        dto.currency,
+        amountMinor,
+        manager,
+      );
 
-      const updated = await this.walletBalanceRepo.getBalance(wallet.id, dto.currency, manager);
+      const updated = await this.walletBalanceRepo.getBalance(
+        wallet.id,
+        dto.currency,
+        manager,
+      );
 
       // Record transaction
       await this.transactionsService.create(
@@ -63,7 +80,6 @@ export class WalletsService {
         },
         manager,
       );
-
 
       return {
         currency: updated!.currency,
@@ -104,4 +120,3 @@ export class WalletsService {
     };
   }
 }
-

@@ -9,7 +9,7 @@ import { EmailParams } from './email.interface';
 export abstract class BaseEmailService {
   protected readonly logger = new Logger(this.constructor.name);
 
-  constructor() { }
+  constructor() {}
 
   abstract sendEmail(params: EmailParams): Promise<void>;
 

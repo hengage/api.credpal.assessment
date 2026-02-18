@@ -6,16 +6,16 @@ import { Transaction } from './entities/transaction.entity';
 
 @Injectable()
 export class TransactionsRepository extends BaseRepository<Transaction> {
-    constructor(@Inject(DATA_SOURCE) dataSource: DataSource) {
-        super(dataSource.getRepository(Transaction));
-    }
+  constructor(@Inject(DATA_SOURCE) dataSource: DataSource) {
+    super(dataSource.getRepository(Transaction));
+  }
 
-    async create(
-        data: Partial<Transaction>,
-        manager?: EntityManager,
-    ): Promise<Transaction> {
-        const repo = manager?.getRepository(Transaction) ?? this.repo;
-        const transaction = repo.create(data);
-        return await repo.save(transaction);
-    }
+  async create(
+    data: Partial<Transaction>,
+    manager?: EntityManager,
+  ): Promise<Transaction> {
+    const repo = manager?.getRepository(Transaction) ?? this.repo;
+    const transaction = repo.create(data);
+    return await repo.save(transaction);
+  }
 }

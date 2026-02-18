@@ -58,7 +58,11 @@ export class RedisService implements OnApplicationShutdown {
     return JSON.parse(value) as T;
   }
 
-  async setJson(key: string, value: unknown, ttlSeconds?: number): Promise<void> {
+  async setJson(
+    key: string,
+    value: unknown,
+    ttlSeconds?: number,
+  ): Promise<void> {
     await this.set(key, JSON.stringify(value), ttlSeconds);
   }
 }

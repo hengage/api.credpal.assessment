@@ -1,6 +1,5 @@
 declare type Keys<T> = keyof T;
 
-
 declare type JSONValue =
   | (null | undefined)
   | string

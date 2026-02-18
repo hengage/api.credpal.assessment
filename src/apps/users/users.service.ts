@@ -42,6 +42,10 @@ export class UsersService {
 
   async markAsVerified(email: string, manager?: EntityManager): Promise<void> {
     const user = await this.usersRepository.findByEmail(email, manager);
-    await this.usersRepository.updateUser(user.id, { verifiedAt: new Date() }, manager);
+    await this.usersRepository.updateUser(
+      user.id,
+      { verifiedAt: new Date() },
+      manager,
+    );
   }
 }

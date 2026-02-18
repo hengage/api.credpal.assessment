@@ -3,7 +3,10 @@ import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
-  @ApiProperty({ example: 'user@example.com', description: 'User email address' })
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'User email address',
+  })
   @IsEmail()
   @MaxLength(255)
   @IsNotEmpty()
@@ -21,7 +24,10 @@ export class RegisterDto {
   @IsNotEmpty()
   lastName: string;
 
-  @ApiProperty({ example: 'password123', description: 'User password (min 8 chars)' })
+  @ApiProperty({
+    example: 'password123',
+    description: 'User password (min 8 chars)',
+  })
   @MinLength(8)
   @MaxLength(128)
   @IsString()
@@ -30,7 +36,10 @@ export class RegisterDto {
 }
 
 export class LoginDto {
-  @ApiProperty({ example: 'user@example.com', description: 'User email address' })
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'User email address',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
@@ -42,7 +51,10 @@ export class LoginDto {
 }
 
 export class VerifyEmailDto {
-  @ApiProperty({ example: 'user@example.com', description: 'User email address' })
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'User email address',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
@@ -56,7 +68,10 @@ export class VerifyEmailDto {
 }
 
 export class ResendOtpDto {
-  @ApiProperty({ example: 'user@example.com', description: 'User email address' })
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'User email address',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;

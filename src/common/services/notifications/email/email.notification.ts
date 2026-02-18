@@ -64,6 +64,6 @@ export class EmailService extends BaseEmailService {
     EmailProviders,
     (args: EmailParams) => Promise<void>
   > = {
-      [EMAIL_PROVIDERS.BREVO]: this.brevoEmailProvider.bind(this) as EmailHandler,
-    };
+    [EMAIL_PROVIDERS.BREVO]: this.brevoEmailProvider.bind(this) as EmailHandler,
+  };
 }

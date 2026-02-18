@@ -8,7 +8,8 @@ import { ITransactionsService } from './transactions.service.abstract';
 @Module({
   imports: [DatabaseModule],
   controllers: [TransactionsController],
-  providers: [TransactionsRepository,
+  providers: [
+    TransactionsRepository,
     {
       provide: ITransactionsService,
       useClass: TransactionsService,

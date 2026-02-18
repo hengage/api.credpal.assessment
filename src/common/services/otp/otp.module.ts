@@ -7,4 +7,4 @@ import { RedisModule } from '../redis/redis.module';
   providers: [OtpService],
   exports: [OtpService],
 })
-export class OtpModule { }
+export class OtpModule {}

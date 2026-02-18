@@ -5,7 +5,7 @@ import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class TransactionsService {
-  constructor(private readonly transactionsRepo: TransactionsRepository) { }
+  constructor(private readonly transactionsRepo: TransactionsRepository) {}
 
   async create(
     data: Partial<Transaction>,

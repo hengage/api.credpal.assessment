@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/auth.dto';
 import { User } from '../users/entities/user.entity';
@@ -84,7 +89,10 @@ export class AuthService {
     return isValid ? user : null;
   }
 
-  async login(email: string, password: string): Promise<{ token: string; user: UserDto }> {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<{ token: string; user: UserDto }> {
     const user = await this.validateUser(email, password);
     if (!user) {
       throw new UnauthorizedException(Msgs.auth.INVALID_CREDENTIALS());

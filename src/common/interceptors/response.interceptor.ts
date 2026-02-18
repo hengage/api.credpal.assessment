@@ -11,12 +11,14 @@ import { METADATA_KEYS } from '../constants';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
-  constructor(private reflector: Reflector) { }
+  constructor(private reflector: Reflector) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const responseMessage =
-      this.reflector.get<string>(METADATA_KEYS.RESPONSE_MESSAGE, context.getHandler()) ||
-      'Request successful';
+      this.reflector.get<string>(
+        METADATA_KEYS.RESPONSE_MESSAGE,
+        context.getHandler(),
+      ) || 'Request successful';
 
     return next.handle().pipe(
       map((data: JSONValue) => ({
